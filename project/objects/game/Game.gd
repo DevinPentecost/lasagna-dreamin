@@ -7,6 +7,13 @@ var key_action_map = {
 	KEY_R: 3
 }
 
+var ingredient_textures = {
+	0: preload("res://objects/game/noodles.png"),
+	1: preload("res://objects/game/sauces.png"),
+	2: preload("res://objects/game/cheeses.png"),
+	3: preload("res://objects/game/meats.png")
+}
+
 @onready var jahnathan = $Jahnathan
 @onready var gorfyard = $Gorfyard
 @onready var plate = $Plate
@@ -57,6 +64,7 @@ func perform_action(action_index : int, modified : bool):
 		current_lasagna.append(action_index)
 		start = selected
 		destination = plate
+		plate.add_item(ingredient_textures[action_index])
 	else:
 		var is_oven = action_index != 3
 		if is_oven:
@@ -70,6 +78,8 @@ func perform_action(action_index : int, modified : bool):
 					current_lasagna = []
 					start = plate
 					destination = oven
+					for child in plate.get_children():
+						child.queue_free()
 			else:
 				# Throw it somewhere
 				start = oven
@@ -85,12 +95,15 @@ func perform_action(action_index : int, modified : bool):
 				destination = trash
 	
 	if (start != null) and (destination != null):
-		var object = Sprite2D.new()
-		object = preload("res://objects/game/lasagna.png")
+		var object = null
+		if is_ingredient:
+			object = ingredient_textures[action_index]
+		else:
+			object = preload("res://objects/game/lasagna.png")
 		throw_object(object, start.position, destination.position, 10)
 	
 
-func throw_object(object : Texture, start : Vector2, destination : Vector2, height : float):
+func throw_object(texture : Texture, start : Vector2, destination : Vector2, height : float):
 	var peak = Vector2(pickNumberWithVariance(start.x, destination.x, 30), 600)
 	var path = createPathWithArc(start, destination, peak.y)
 	add_child(path)
@@ -98,7 +111,7 @@ func throw_object(object : Texture, start : Vector2, destination : Vector2, heig
 	path.add_child(follow)
 	
 	var sprite = Sprite2D.new()
-	sprite.texture = object
+	sprite.texture = texture
 	follow.add_child(sprite)
 	
 	var tween = get_tree().create_tween()
@@ -128,12 +141,6 @@ func createPathWithArc(start: Vector2, destination: Vector2, height: float) -> P
 
 	return path
 
-func build_request(items : int):
-	var request = []
-	for i in items:
-		request.append(randi_range(0, 3))
-	return request
-
 func _unhandled_input(event):
 	event = event as InputEventKey
 	
@@ -142,10 +149,5 @@ func _unhandled_input(event):
 			return
 		var modified = event.shift_pressed
 		var action = key_action_map.get(event.key_label)
-		if action and event.pressed:
+		if action != null and event.pressed:
 			perform_action(action, modified)
-
-
-func _on_request_timer_timeout():
-	# Request something new to eat
-	requests.append(build_request(5))
