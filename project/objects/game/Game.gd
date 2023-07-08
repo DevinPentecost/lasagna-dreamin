@@ -1,3 +1,4 @@
+class_name Game
 extends Node2D
 
 var key_action_map = {
@@ -7,7 +8,7 @@ var key_action_map = {
 	KEY_R: 3
 }
 
-var ingredient_textures = {
+static var ingredient_textures = {
 	0: preload("res://objects/game/noodles.png"),
 	1: preload("res://objects/game/sauces.png"),
 	2: preload("res://objects/game/cheeses.png"),
@@ -33,7 +34,7 @@ var ingredient_textures = {
 	true: {0: oven_0, 1: oven_1, 2: oven_2, 3: trash}
 }
 
-var current_lasagna = []
+static var current_lasagna = []
 @onready var ovens = {0: oven_0, 1: oven_1, 2: oven_2}
 
 var requests = []
@@ -48,9 +49,7 @@ func _process(delta):
 	pass
 
 func perform_action(action_index : int, modified : bool):
-	print(action_index)
-	print(modified)
-	
+
 	# Move Jahn to the same X coordinate as the target object
 	var selected = target_nodes[modified][action_index]
 	jahnathan.position.x = selected.position.x
@@ -64,7 +63,7 @@ func perform_action(action_index : int, modified : bool):
 		current_lasagna.append(action_index)
 		start = selected
 		destination = plate
-		plate.add_item(ingredient_textures[action_index])
+		plate.add_item(action_index)
 	else:
 		var is_oven = action_index != 3
 		if is_oven:
@@ -78,15 +77,22 @@ func perform_action(action_index : int, modified : bool):
 					current_lasagna = []
 					start = plate
 					destination = oven
-					for child in plate.get_children():
-						child.queue_free()
+					
+					# Clear all the items on the plate
+					plate.clear_items()
 			else:
 				# Throw it somewhere
 				start = oven
-				if cooked == Oven.Cooked.COOKED:
+				if cooked == Oven.Cooked.COOKED and gorfyard.eat(lasagna):
 					destination = gorfyard
+					
+					# YOU SCORED!
+					print("Yum!!")
 				else:
 					destination = trash
+					
+					# GROSS
+					print("Garfield didn't want that...")
 		else:
 			# Its trashin' time
 			if current_lasagna.size() > 0:
