@@ -38,6 +38,7 @@ static var current_lasagna = []
 @onready var ovens = {0: oven_0, 1: oven_1, 2: oven_2}
 
 var requests = []
+var score = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -88,6 +89,7 @@ func perform_action(action_index : int, modified : bool):
 					
 					# YOU SCORED!
 					print("Yum!!")
+					score += 1
 				else:
 					destination = trash
 					
