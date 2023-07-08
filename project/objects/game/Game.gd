@@ -26,6 +26,11 @@ var key_action_map = {
 	true: {0: oven_0, 1: oven_1, 2: oven_2, 3: trash}
 }
 
+var current_lasagna = []
+@onready var ovens = {0: oven_0, 1: oven_1, 2: oven_2}
+
+var requests = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -43,16 +48,46 @@ func perform_action(action_index : int, modified : bool):
 	var selected = target_nodes[modified][action_index]
 	jahnathan.position.x = selected.position.x
 	
-	var start = selected
-	var destination = plate
-	if modified:
-		start = plate
-		destination = selected
+	var start : Node2D = null
+	var destination : Node2D = null
 	
-	var object = Sprite2D.new()
+	var is_ingredient = !modified
+	if is_ingredient:
+		# Add to the current lasagna stack
+		current_lasagna.append(action_index)
+		start = selected
+		destination = plate
+	else:
+		var is_oven = action_index != 3
+		if is_oven:
+			var oven : Oven = ovens[action_index]
+			var cooked = oven.cooked
+			var lasagna = oven.current_lasagna
+			if lasagna == null:
+				if current_lasagna.size() > 0:
+					# Start cooking it
+					oven.current_lasagna = current_lasagna
+					current_lasagna = []
+					start = plate
+					destination = oven
+			else:
+				# Throw it somewhere
+				start = oven
+				if cooked == Oven.Cooked.COOKED:
+					destination = gorfyard
+				else:
+					destination = trash
+		else:
+			# Its trashin' time
+			if current_lasagna.size() > 0:
+				current_lasagna = []
+				start = plate
+				destination = trash
 	
-	object = preload("res://icon.svg")
-	throw_object(object, start.position, destination.position, 10)
+	if (start != null) and (destination != null):
+		var object = Sprite2D.new()
+		object = preload("res://icon.svg")
+		throw_object(object, start.position, destination.position, 10)
 	
 
 func throw_object(object : Texture, start : Vector2, destination : Vector2, height : float):
@@ -93,6 +128,12 @@ func createPathWithArc(start: Vector2, destination: Vector2, height: float) -> P
 
 	return path
 
+func build_request(items : int):
+	var request = []
+	for i in items:
+		request.append(randi_range(0, 3))
+	return request
+
 func _unhandled_input(event):
 	event = event as InputEventKey
 	
@@ -103,3 +144,8 @@ func _unhandled_input(event):
 		var action = key_action_map.get(event.key_label)
 		if action and event.pressed:
 			perform_action(action, modified)
+
+
+func _on_request_timer_timeout():
+	# Request something new to eat
+	requests.append(build_request(5))
