@@ -1,48 +1,51 @@
-[gd_scene load_steps=4 format=3 uid="uid://d2blf47mp60vc"]
+[gd_scene load_steps=11 format=3 uid="uid://d2blf47mp60vc"]
 
-[ext_resource type="Texture2D" uid="uid://dfarimmm7tu8p" path="res://icon.svg" id="1_fr7rc"]
 [ext_resource type="Script" path="res://objects/game/Game.gd" id="1_wdln6"]
+[ext_resource type="Texture2D" uid="uid://dnaqtv86h5d86" path="res://objects/game/jahn.png" id="2_puim7"]
+[ext_resource type="Texture2D" uid="uid://di354trbo153u" path="res://objects/game/cat.png" id="3_lwk13"]
 [ext_resource type="PackedScene" uid="uid://0jmxgwn2piuj" path="res://objects/game/Oven.tscn" id="3_x11yu"]
+[ext_resource type="Texture2D" uid="uid://jc2hl6vp4etw" path="res://objects/game/noodles.png" id="3_yi368"]
+[ext_resource type="Texture2D" uid="uid://1ikxy86aabls" path="res://objects/game/baking-dish-clipart-26197.jpg" id="4_6n7g4"]
+[ext_resource type="Texture2D" uid="uid://wcshxctg8e4y" path="res://objects/game/sauces.png" id="4_oepu2"]
+[ext_resource type="Texture2D" uid="uid://da3ftpna0l5qn" path="res://objects/game/trash.png" id="5_a1mqv"]
+[ext_resource type="Texture2D" uid="uid://bu3gci7ticosj" path="res://objects/game/cheeses.png" id="5_j5dbj"]
+[ext_resource type="Texture2D" uid="uid://bdo7dslw51x44" path="res://objects/game/meats.png" id="6_lwaik"]
 
 [node name="GameStuff" type="Node2D"]
 script = ExtResource("1_wdln6")
 
 [node name="Jahnathan" type="Sprite2D" parent="."]
 position = Vector2(700, 664)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("2_puim7")
 
 [node name="Gorfyard" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0.827451, 0.0509804, 1)
 position = Vector2(1062, 532)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("3_lwk13")
 
 [node name="Plate" type="Sprite2D" parent="."]
 position = Vector2(422, 533)
-texture = ExtResource("1_fr7rc")
+scale = Vector2(0.198196, 0.198196)
+texture = ExtResource("4_6n7g4")
 
 [node name="Trash" type="Sprite2D" parent="."]
-self_modulate = Color(0.878431, 0.607843, 0.368627, 1)
 position = Vector2(234, 533)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("5_a1mqv")
 
 [node name="Ingredient0" type="Sprite2D" parent="."]
 position = Vector2(558, 414)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("3_yi368")
 
 [node name="Ingredient1" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0.0509804, 0.0509804, 1)
 position = Vector2(679, 268)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("4_oepu2")
 
 [node name="Ingredient2" type="Sprite2D" parent="."]
-self_modulate = Color(0.937255, 1, 0.0509804, 1)
 position = Vector2(834, 395)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("5_j5dbj")
 
 [node name="Ingredient3" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0.537255, 0.321569, 1)
 position = Vector2(705, 445)
-texture = ExtResource("1_fr7rc")
+texture = ExtResource("6_lwaik")
 
 [node name="RequestTimer" type="Timer" parent="."]
 wait_time = 10.0

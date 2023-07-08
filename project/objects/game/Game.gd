@@ -86,7 +86,7 @@ func perform_action(action_index : int, modified : bool):
 	
 	if (start != null) and (destination != null):
 		var object = Sprite2D.new()
-		object = preload("res://icon.svg")
+		object = preload("res://objects/game/lasagna.png")
 		throw_object(object, start.position, destination.position, 10)
 	
 
