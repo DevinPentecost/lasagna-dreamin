@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3 uid="uid://i83ucfqsyp5g"]
+
+[sub_resource type="GDScript" id="GDScript_ee5mn"]
+script/source = "class_name Stacker
+extends Sprite2D
+
+@export var item_offset = Vector2(0, -10)
+var items = []
+
+func add_item(ingredient_index : int):
+	items.append(ingredient_index)
+	var item = Game.ingredient_textures[ingredient_index]
+	if item is Texture2D:
+		var sprite = Sprite2D.new()
+		sprite.texture = item
+		item = sprite
+		
+	item.position = get_child_count() * item_offset
+	add_child(item)
+
+func compare_ingredients(ingredients : Array):
+	
+	var match_index = -1
+	for i in range(ingredients.size()):
+		if i < items.size():
+			if items[i] != ingredients[i]:
+				break
+			match_index = i
+	
+	# If the match index isn't as much as the ingredients, they are all dark gray
+	if match_index < ingredients.size() - 1:
+		for child in get_children():
+			child.self_modulate = Color.BLACK
+	else:
+		# If the match index is less than or equal to the ingredients, white up to the match and gray otherwise
+		for i in range(get_child_count()):
+			var child = get_child(i)
+			if i >= match_index:
+				child.self_modulate = Color.GRAY
+			else:
+				child.self_modulate = Color.WHITE
+				
+	#Return whether it's a match in its entirety
+	return match_index == get_child_count() - 1 and match_index > -1
+
+func clear_items():
+	items = []
+	for child in get_children():
+		child.queue_free()
+"
+
+[node name="Stacker" type="Sprite2D"]
+script = SubResource("GDScript_ee5mn")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://0jmxgwn2piuj"]
+
+[ext_resource type="Texture2D" uid="uid://bxxbc2exrglfu" path="res://objects/game/oven.png" id="1_hgpq1"]
+[ext_resource type="Script" path="res://objects/game/Oven.gd" id="2_2uv2u"]
+
+[node name="Oven" type="Sprite2D"]
+texture = ExtResource("1_hgpq1")
+script = ExtResource("2_2uv2u")
+
+[node name="CookTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="BurnTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="StatusSprite" type="Sprite2D" parent="."]
+
+[connection signal="timeout" from="CookTimer" to="." method="_on_cook_timer_timeout"]
+[connection signal="timeout" from="BurnTimer" to="." method="_on_burn_timer_timeout"]
