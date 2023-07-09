@@ -9,10 +9,10 @@ var key_action_map = {
 }
 
 static var ingredient_textures = {
-	0: preload("res://objects/game/noodles.png"),
-	1: preload("res://objects/game/sauces.png"),
-	2: preload("res://objects/game/cheeses.png"),
-	3: preload("res://objects/game/meats.png")
+	0: preload("res://sprites/noodle_multi.png"),
+	1: preload("res://sprites/sauce_multi.png"),
+	2: preload("res://sprites/cheese_multi.png"),
+	3: preload("res://sprites/meat_multi.png"),
 }
 
 @onready var jahnathan = $Jahnathan
@@ -107,7 +107,7 @@ func perform_action(action_index : int, modified : bool):
 		if is_ingredient:
 			object = ingredient_textures[action_index]
 		else:
-			object = preload("res://objects/game/lasagna.png")
+			object = preload("res://sprites/lasagna_cooked.png")
 		throw_object(object, start.position, destination.position, 10)
 	
 

@@ -1,0 +1,280 @@
+[gd_scene load_steps=18 format=3 uid="uid://dunwsw0k1w0of"]
+
+[ext_resource type="Script" path="res://objects/game/Game.gd" id="1_aqsrp"]
+[ext_resource type="Texture2D" uid="uid://b0656adjuv0dy" path="res://sprites/jon.png" id="2_pvkfc"]
+[ext_resource type="PackedScene" uid="uid://dgy4tp8mfi15f" path="res://objects/game/gorfyard.tscn" id="3_gngdg"]
+[ext_resource type="PackedScene" uid="uid://i83ucfqsyp5g" path="res://objects/stacker/Stacker.tscn" id="4_54hvb"]
+[ext_resource type="Texture2D" uid="uid://eayvi68jcrm3" path="res://sprites/lasagna_empty.png" id="5_bl1jt"]
+[ext_resource type="Texture2D" uid="uid://c6aojgnf1xh6n" path="res://sprites/trash_closed.png" id="7_u4l4j"]
+[ext_resource type="Texture2D" uid="uid://bbpu0oocitk23" path="res://sprites/noodle_single.png" id="8_ulbnn"]
+[ext_resource type="Texture2D" uid="uid://b4y3r5p7umd8t" path="res://sprites/sauce_single.png" id="10_5grs4"]
+[ext_resource type="PackedScene" uid="uid://0jmxgwn2piuj" path="res://objects/game/Oven.tscn" id="11_4d7is"]
+[ext_resource type="Texture2D" uid="uid://b5bxweskijfxo" path="res://sprites/cheese_single.png" id="11_q7nuu"]
+[ext_resource type="Texture2D" uid="uid://b66iytuyovtoj" path="res://sprites/meat_single.png" id="12_3qteg"]
+[ext_resource type="FontFile" uid="uid://5sibjd30jgjn" path="res://sprites/OpenSauceSans-Black.ttf" id="12_a28nw"]
+[ext_resource type="Texture2D" uid="uid://tlrac566ypvf" path="res://sprites/frame.png" id="13_ipsnm"]
+[ext_resource type="Texture2D" uid="uid://do8coyg0m0vyk" path="res://sprites/background.png" id="14_1pc1q"]
+
+[sub_resource type="GDScript" id="GDScript_ucyyc"]
+script/source = "extends Node2D
+
+func _input(event):
+	event = event as InputEventKey
+	if event:
+		if event.echo:
+			return
+		var modified = event.keycode == KEY_SHIFT and event.pressed or event.shift_pressed and event.pressed
+		visible = !modified
+"
+
+[sub_resource type="GDScript" id="GDScript_ef1sx"]
+script/source = "extends Node2D
+
+@onready var q = $Q
+@onready var w = $W
+@onready var e = $E
+@onready var r = $R
+
+@onready var trash = $\"../Trash\"
+@onready var lid_closed = trash.texture
+@onready var lid_open = preload(\"res://sprites/trash_open.png\")
+
+var lid_timer = 0
+
+func _process(delta):
+	if lid_timer > 0:
+		lid_timer -= delta
+		if lid_timer < 0:
+			trash.texture = lid_closed
+
+func _input(event):
+	event = event as InputEventKey
+	if event:
+		if event.echo:
+			return
+		var modified = event.keycode == KEY_SHIFT and event.pressed or event.shift_pressed and event.pressed
+		
+		for child in [q, w, e, r]:
+			child.visible = modified
+
+		if event.keycode == KEY_R and event.pressed:
+			trash.texture = lid_open
+			lid_timer = 1.0
+"
+
+[sub_resource type="GDScript" id="GDScript_jof5t"]
+script/source = "extends Label
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text = \"EATEN = \" + str(get_tree().get_first_node_in_group(\"game\").score)
+"
+
+[node name="GameStuff" type="Node2D" groups=["game"]]
+script = ExtResource("1_aqsrp")
+
+[node name="Jahnathan" type="Sprite2D" parent="."]
+z_index = 5
+position = Vector2(179, 429)
+texture = ExtResource("2_pvkfc")
+
+[node name="Gorfyard" parent="." instance=ExtResource("3_gngdg")]
+z_index = 1
+position = Vector2(775, 257)
+scale = Vector2(0.9, 0.9)
+
+[node name="Plate" parent="." instance=ExtResource("4_54hvb")]
+modulate = Color(1, 1, 1, 0.705882)
+z_index = 1
+position = Vector2(473, 321)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("5_bl1jt")
+
+[node name="Trash" type="Sprite2D" parent="."]
+z_index = 10
+z_as_relative = false
+position = Vector2(785, 693)
+texture = ExtResource("7_u4l4j")
+
+[node name="Ingredient0" type="Sprite2D" parent="."]
+position = Vector2(76, 119)
+texture = ExtResource("8_ulbnn")
+
+[node name="Q" type="Label" parent="Ingredient0"]
+offset_left = -18.0
+offset_top = -76.0
+offset_right = 22.0
+offset_bottom = -33.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 32
+text = "Q	"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Ingredient1" type="Sprite2D" parent="."]
+position = Vector2(147, 119)
+texture = ExtResource("10_5grs4")
+
+[node name="W" type="Label" parent="Ingredient1"]
+offset_left = -18.0
+offset_top = -76.0
+offset_right = 22.0
+offset_bottom = -33.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 32
+text = "W
+"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Ingredient2" type="Sprite2D" parent="."]
+position = Vector2(220, 119)
+texture = ExtResource("11_q7nuu")
+
+[node name="E" type="Label" parent="Ingredient2"]
+offset_left = -18.0
+offset_top = -76.0
+offset_right = 22.0
+offset_bottom = -33.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 32
+text = "E"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Ingredient3" type="Sprite2D" parent="."]
+position = Vector2(295, 119)
+texture = ExtResource("12_3qteg")
+
+[node name="R" type="Label" parent="Ingredient3"]
+offset_left = -18.0
+offset_top = -76.0
+offset_right = 22.0
+offset_bottom = -33.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 32
+text = "R"
+horizontal_alignment = 1
+
+[node name="Oven0" parent="." instance=ExtResource("11_4d7is")]
+position = Vector2(180, 443)
+
+[node name="Oven1" parent="." instance=ExtResource("11_4d7is")]
+position = Vector2(473, 443)
+
+[node name="Oven2" parent="." instance=ExtResource("11_4d7is")]
+position = Vector2(775, 444)
+
+[node name="UI" type="Node2D" parent="."]
+position = Vector2(679, 438)
+script = SubResource("GDScript_ucyyc")
+
+[node name="UI2" type="Node2D" parent="."]
+position = Vector2(176, 430)
+script = SubResource("GDScript_ef1sx")
+
+[node name="Q" type="Label" parent="UI2"]
+visible = false
+z_index = 14
+offset_left = -89.0
+offset_top = 1.0
+offset_right = 98.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 48
+text = "Q"
+horizontal_alignment = 1
+
+[node name="W" type="Label" parent="UI2"]
+visible = false
+z_index = 14
+offset_left = 204.0
+offset_top = 1.0
+offset_right = 391.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 48
+text = "W"
+horizontal_alignment = 1
+
+[node name="E" type="Label" parent="UI2"]
+visible = false
+z_index = 14
+offset_left = 499.0
+offset_top = 1.0
+offset_right = 686.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 48
+text = "E"
+horizontal_alignment = 1
+
+[node name="R" type="Label" parent="UI2"]
+visible = false
+z_index = 14
+offset_left = 513.0
+offset_top = 166.0
+offset_right = 700.0
+offset_bottom = 229.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 48
+text = "R"
+horizontal_alignment = 1
+
+[node name="SHIFT" type="Label" parent="UI2"]
+modulate = Color(1, 1, 1, 0.501961)
+z_index = 12
+offset_left = 221.0
+offset_top = 170.0
+offset_right = 408.0
+offset_bottom = 233.0
+theme_override_colors/font_color = Color(0.921569, 0.337255, 0.25098, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 48
+text = "SHIFT +"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="UI3" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Score" type="Label" parent="UI3"]
+layout_mode = 0
+offset_left = 357.0
+offset_top = 177.0
+offset_right = 601.0
+offset_bottom = 240.0
+theme_override_colors/font_color = Color(0.294118, 0.356863, 0.670588, 1)
+theme_override_fonts/font = ExtResource("12_a28nw")
+theme_override_font_sizes/font_size = 48
+text = "EATEN = 0"
+horizontal_alignment = 1
+script = SubResource("GDScript_jof5t")
+
+[node name="frame" type="TextureRect" parent="UI3"]
+z_index = 10
+z_as_relative = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("13_ipsnm")
+metadata/_edit_lock_ = true
+
+[node name="bg" type="TextureRect" parent="UI3"]
+z_index = -2
+layout_mode = 0
+offset_right = 960.0
+offset_bottom = 720.0
+texture = ExtResource("14_1pc1q")
+metadata/_edit_lock_ = true

@@ -6,8 +6,10 @@ extends Sprite2D
 @onready var cook_timer = $CookTimer
 @onready var burn_timer = $BurnTimer
 
-var xmark = preload("res://objects/game/xmark.png")
-var checkmark = preload("res://objects/game/checkmark.png")
+var oven_burnt = preload("res://sprites/oven_overcooked.png")
+var oven_cooked = preload("res://sprites/oven_cooked.png")
+var oven_cooking = preload("res://sprites/oven_cooking.png")
+var oven_off = preload("res://sprites/oven_off.png")
 
 var current_lasagna = null : set = set_lasagna, get = get_lasagna
 var cooked = Cooked.RAW
@@ -20,7 +22,7 @@ enum Cooked {
 func set_lasagna(lasagna):
 	current_lasagna = lasagna
 	cooked = Cooked.RAW
-	status_sprite.texture = null
+	texture = oven_cooking
 	if lasagna != null:
 		burn_timer.stop()
 		cook_timer.start()
@@ -28,7 +30,7 @@ func set_lasagna(lasagna):
 func get_lasagna():
 	burn_timer.stop()
 	cook_timer.stop()
-	status_sprite.texture = null
+	texture = oven_off
 	
 	var lasagna = current_lasagna
 	current_lasagna = null
@@ -46,9 +48,9 @@ func _process(delta):
 func _on_burn_timer_timeout():
 	# You burned the food dummy
 	cooked = Cooked.BURNT
-	status_sprite.texture = xmark
+	texture = oven_burnt
 
 func _on_cook_timer_timeout():
 	cooked = Cooked.COOKED
-	status_sprite.texture = checkmark
+	status_sprite.texture = oven_cooked
 	burn_timer.start()

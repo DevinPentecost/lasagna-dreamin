@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgy4tp8mfi15f"]
+[gd_scene load_steps=5 format=3 uid="uid://dgy4tp8mfi15f"]
 
-[ext_resource type="Texture2D" uid="uid://di354trbo153u" path="res://objects/game/cat.png" id="1_7u3ra"]
+[ext_resource type="Texture2D" uid="uid://b6yctufpxj0rw" path="res://sprites/garf.png" id="1_ffns7"]
 [ext_resource type="Script" path="res://objects/game/Gorfyard.gd" id="2_g6lsj"]
 [ext_resource type="PackedScene" uid="uid://i83ucfqsyp5g" path="res://objects/stacker/Stacker.tscn" id="3_yy80h"]
+[ext_resource type="Texture2D" uid="uid://boy5c175ugldm" path="res://sprites/cloud.png" id="4_bdyoy"]
 
 [node name="Gorfyard" type="Sprite2D"]
 position = Vector2(1062, 532)
-texture = ExtResource("1_7u3ra")
+texture = ExtResource("1_ffns7")
 script = ExtResource("2_g6lsj")
 
 [node name="Timer" type="Timer" parent="."]
@@ -14,21 +15,26 @@ wait_time = 15.0
 autostart = true
 
 [node name="Stacker0" parent="." instance=ExtResource("3_yy80h")]
-position = Vector2(-48, -410)
+position = Vector2(106, -142)
 
 [node name="Stacker1" parent="." instance=ExtResource("3_yy80h")]
-position = Vector2(-211, -408)
+position = Vector2(66, -187)
 
 [node name="Stacker2" parent="." instance=ExtResource("3_yy80h")]
-position = Vector2(-70, -248)
+position = Vector2(22, -140)
 
 [node name="Stacker3" parent="." instance=ExtResource("3_yy80h")]
-position = Vector2(-375, -408)
+position = Vector2(-26, -187)
 
 [node name="Stacker4" parent="." instance=ExtResource("3_yy80h")]
-position = Vector2(-527, -410)
+position = Vector2(-73, -142)
 
 [node name="Stacker5" parent="." instance=ExtResource("3_yy80h")]
-position = Vector2(-714, -408)
+position = Vector2(-116, -187)
+
+[node name="thinking" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(-9, -124)
+texture = ExtResource("4_bdyoy")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
