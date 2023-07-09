@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://blcpx31gom2w4"]
+
+[ext_resource type="Texture2D" uid="uid://tlrac566ypvf" path="res://sprites/frame.png" id="1_eh2hy"]
+[ext_resource type="Texture2D" uid="uid://do8coyg0m0vyk" path="res://sprites/background.png" id="2_m3lua"]
+
+[node name="root" type="Node2D"]
+
+[node name="frame" type="TextureRect" parent="."]
+z_index = -1
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_eh2hy")
+
+[node name="background" type="TextureRect" parent="frame"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_m3lua")
